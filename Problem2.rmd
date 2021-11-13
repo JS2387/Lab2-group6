@@ -99,6 +99,8 @@ loglikelihood <- function(theta, x) {
 
 We are passing the negative value of the log-likelihood as the optim() minimizes that are passed into it. Hence, in order to maximize log-likelihood, we return the negative value of the log-likelihood.
 
+## Optimizing without specifying gradient
+
 Next we pass the initial parameters $\mu$ = 0 and $\sigma$ = 1 and optimize as follows:
 
 ``` {r}
@@ -108,9 +110,75 @@ optim_norm_BFGS_withoutgradient
 optim_norm_CG_withoutgradient <- optim(par = c(0,1), loglikelihood, x = data, method = "CG")
 optim_norm_CG_withoutgradient
 
-
-
 ```
+
+
+The results show that when using the BFGS method, the function was called 37 times and the calculated gradient was 15. In the case of the CG method, the function was called 297 times with the gradient being 45. The results are pretty close to the true values that were calculated earlier in the paper.
+
+## Optimizing with gradient
+
+Now we'll attempt to optimize by providing a gradient function. For writing the gradient function we will use the understanding that we are optimizing the log-likelihood function. And we will obtain the optimized value of the log-likehood function at the MLE values for our parameters i.e.  $\mu$ and $\sigma$. Thus, our gradient function will be written to return the following expressions:
+
+$$
+\hat\mu_{MLE} = \frac{1}{\sigma^2}\Big(\sum^{n}_{i=1}(y_i)-n\mu\Big)
+$$
+
+and,
+
+$$
+\hat\sigma^2_{MLE} = -\frac{n}{\sigma} + \frac{\sum^{n}_{i=1}(y_i-\mu)^2}{\sigma^3}
+$$
+So to reflect this, our code is as follows:
+
+``` {r}
+gradient <- function(par, x) {
+  mu = par[1]
+  sigma = par[2]
+  n = length(x)
+  mu_est = -(sum(x) - n*mu)/sigma^2
+  sigma_est = n/sigma - sum((x - mu)^2)/sigma^3
+  return(c(mu_est, sigma_est))
+}
+```
+
+Note that we returned the -ve values of $\mu$ and $\sigma$. This is because we are minimizing -ve log likelihood, thus we accordingly need to pass the -ve values of estimators that will minimize the function. And thus, we modify our optim function with gradient for both methods as follows:
+
+``` {r}
+optim_norm_BFGS_withgradient <- optim(par = c(0,1), 
+                                      gr = gradient, 
+                                      loglikelihood, 
+                                      x = data, 
+                                      method = "BFGS")
+optim_norm_BFGS_withgradient
+
+optim_norm_CG_withgradient <- optim(par = c(0,1), 
+                                    gr = gradient, 
+                                    loglikelihood, 
+                                    x = data, 
+                                    method = "CG")
+optim_norm_CG_withgradient
+```
+
+The results are still accurate. All 4 of our attempts lead to convergence, with the value of the function also resulting in the same output for all 4 calls. The bigger difference actually lies in the number of times the function is getting called. If you compare the counts of the 4 calls, we see that there are significantly lesser number of calls to the function being optimized i.e. the loglikelihood() in the CG method, where the number of loglikelihood() calls have been reduced by ~80%! This obviously comes at the cost of accuracy. As we can see that even though the optimized value of mean and the resulting function values are equal to the true value, there is a slight difference in accuracy of the sigma values. And this delta was slightly higher in the CG method with gradient.
+
+## Recommended configuration?
+
+Therefore on the matter of desired settings, because this data set is much smaller, the speed of the optimization doesnt get impacted much, but with larger multivariate datasets, an increased number of function calls can create a processing bottleneck without any significant improvement in accuracy of our results. Hence the recommendation should be that if it is convenient to analytically derive the gradient of the function to be optimized, then we can save on processing speed and get results faster without much loss in precision.And even when the gradient function is not easy, to solve there are packages available that can be used to build a gradient function.
+
+# Log-likelihood vs Likelihood?
+
+The choice between maximizing likelihood vs log(likelihood) is largely led by the following 2 reasons:
+
+1. Analytical convenience: Log() is a monotonically increasing function hence in order to maximize likelihood, we just have to maximize loglikehood. Also, the distributive properties of logarithms help simplify most expressions from multiplication to summation, especially as in the case of Gaussian, we dont have to calculate the exponential terms by taking logarithms. From a computational perspective, summation is not as computationally expensive as multiplication.
+
+2. Avoiding underflow: In statistics and ML we will be working with large datasets comprising of small numbers. If we keep working with likelihood functions, the resulting product terms can very quickly lead to extremely small numbers and loss of floating point precision thus resulting in underflow. Hence, it is recommended that we use log-likelihood for our computations.
+
+
+
+
+
+
+
 
 
 
