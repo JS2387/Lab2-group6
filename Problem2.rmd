@@ -163,7 +163,7 @@ The results are still accurate. All 4 of our attempts lead to convergence, with 
 
 ## Recommended configuration?
 
-Therefore on the matter of desired settings, because this data set is much smaller, the speed of the optimization doesnt get impacted much, but with larger multivariate datasets, an increased number of function calls can create a processing bottleneck without any significant improvement in accuracy of our results. Hence the recommendation should be that if it is convenient to analytically derive the gradient of the function to be optimized, then we can save on processing speed and get results faster without much loss in precision.And even when the gradient function is not easy, to solve there are packages available that can be used to build a gradient function.
+Therefore on the matter of desired settings, because this data set is much smaller, the speed of the optimization doesn't get impacted much, but with larger multivariate datasets, an increased number of function calls can create a processing bottleneck without any significant improvement in accuracy of our results. Hence the recommendation should be that if it is convenient to analytically derive the gradient of the function to be optimized, then we can save on processing speed and get results faster without much loss in precision.And even when the gradient function is not easy, to solve there are packages available that can be used to build a gradient function.
 
 # Log-likelihood vs Likelihood?
 
