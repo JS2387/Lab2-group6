@@ -174,9 +174,48 @@ The choice between maximizing likelihood vs log(likelihood) is largely led by th
 2. Avoiding underflow: In statistics and ML we will be working with large datasets comprising of small numbers. If we keep working with likelihood functions, the resulting product terms can very quickly lead to extremely small numbers and loss of floating point precision thus resulting in underflow. Hence, it is recommended that we use log-likelihood for our computations.
 
 
+#Appendix - code
+
+```{r, results='hide'}
+load("data.Rdata")
+#hist(data)
+
+loglikelihood <- function(theta, x) {
+  mu = theta[1]
+  sig = theta[2]
+  n = length(x)
+  lglklhood = -(n/2)*(log(2*pi*sig^2)) + (-1/(2*sig^2))*sum((x-mu)^2)
+  return(-lglklhood)
+}
+
+optim_norm <- optim(par = c(0,1), loglikelihood, x = data, method = "BFGS")
+optim_norm
+
+optim_norm1 <- optim(par = c(0,1), loglikelihood, x = data, method = "CG")
+optim_norm1
+
+
+mean(data)
+sd(data)
 
 
 
+gradient <- function(par, x) {
+  mu = par[1]
+  sigma = par[2]
+  n = length(x)
+  mu_est = -(sum(x) - n*mu)/sigma^2
+  sigma_est = n/sigma - sum((x - mu)^2)/sigma^3
+  return(c(mu_est, sigma_est))
+}
+
+
+optim_norm2 <- optim(par = c(0,1), gr = gradient, loglikelihood, x = data, method = "BFGS")
+optim_norm2
+
+optim_norm3 <- optim(par = c(0,1), gr = gradient, loglikelihood, x = data, method = "CG")
+optim_norm3
+```
 
 
 

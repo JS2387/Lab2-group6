@@ -8,6 +8,9 @@ likelihood_norm <- function(x, mu, sig) {
   y = 1/(2*pi*sig^2)*exp((-1/(2*sig^2))*(x-mu)^2)
 }
 
+plot(x= data, likelihood_norm(data, mu = mean(data), sig = sd(data)))
+theta <- c(mean(data),sd(data))
+
 
 
 loglikelihood <- function(theta, x) {
@@ -56,3 +59,14 @@ optim_norm$counts
 optim_norm1$counts
 optim_norm2$counts
 optim_norm3$counts
+
+optim_norm$value
+optim_norm1$value
+optim_norm2$value
+optim_norm3$value
+
+
+nll.normal <- function(data, par) {
+  return(-sum(log(dnorm(data, mean=par[1], sd=par[2]))))
+}
+optim(par=c(0, 1), fn=nll.normal, data=data, method = "BFGS")
