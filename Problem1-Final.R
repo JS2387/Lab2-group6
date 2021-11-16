@@ -9,8 +9,7 @@ routine = function(f, points){
 test <- routine(function(x) x^3, c(0.1, 0.55, 0.8))
 test
 
-inter_function <- function(f, n=100) {
-  n = 100
+inter_function <- function(f, n) {
   df <- data.frame(min = c(0:(n-1)),
                    mid = c(1:n),
                    max = c(1:n),
@@ -39,12 +38,14 @@ func1
 
 
 f1 <- data.frame(x1 = seq(from = 0 , to = 1 , by = 0.01))
+
 true_f1 <- (-f1$x1*(1-f1$x1))
 plot(y=true_f1, 
      x=f1$x1,
      xlab = "x",
      ylab = "f(x)",
-     title("Actual f(x) = -x(1-x)"))
+     title("Actual f(x) = -x(1-x)"),
+     t = 'l')
 
 
 
@@ -57,7 +58,7 @@ for( i in 1:100 ) {
   data1 = c(data1, x)
 }
 
-plot(y=f1_hat , x=data1, title("Interpolated f(x) = -x(1-x)"))
+plot(y=f1_hat , x=data1, title("Interpolated f(x), n=100", xlab = "x", ylab = "f(x) = -x(1-x)"))
 
 
 fn2 = function(x) (-x*sin(10*pi*x))
@@ -70,7 +71,8 @@ plot(y=true_f2,
      x=f1$x1,
      xlab = "x",
      ylab = "f(x)",
-     title("Actual f(x) = -x*sin(10*pi*x)"))
+     title("Actual f(x) = -x*sin(10*pi*x)"),
+     t = 'l')
 
 
 f2_hat <- c()
@@ -82,5 +84,84 @@ for( i in 1:100 ) {
   data2 = c(data2 , x )
 }
 
-plot(y=f2_hat , x=data2, title("Interpolated f(x) = -x*sin(10*pi*x)00") )
+plot(y=f2_hat , x=data2, title("Interpolated f(x), n=100 "), xlab = "x", ylab = "f(x) = -x*sin(10*pi*x)" )
 
+
+#n=1000
+f1_1 <- data.frame(x1 = seq(from = 0 , to = 1 , by = 0.001))
+
+fn2 = function(x) (-x*sin(10*pi*x))
+func3 <- inter_function(fn2, n = 1000)
+func3
+
+
+true_f3 <- -f1_1$x1*sin(10*pi*f1_1$x1)
+plot(y=true_f3, 
+     x=f1_1$x1,
+     xlab = "x",
+     ylab = "f(x)",
+     title("Actual f(x) = -x*sin(10*pi*x)"))
+
+
+f3_hat <- c()
+data3 <- c()
+for( i in 1:1000 ) {
+  x= c(func3[i,1], func3[i,2] , func3[i,3])
+  y = func3[i,4] + func3[i,5]*x+ func3[i,6]*x**2
+  f3_hat = c(f3_hat , y)
+  data3 = c(data3 , x )
+}
+
+plot(y=f3_hat , x=data3, title("Interpolated f(x), n=1000 "), xlab = "x", ylab = "f(x) = -x*sin(10*pi*x)", t='l')
+
+
+#n=10
+f1_2 <- data.frame(x1 = seq(from = 0 , to = 1 , by = 0.1))
+func4 <- inter_function(fn1, n = 10)
+
+true_f4 <- (-f1_2$x1*(1-f1_2$x1))
+plot(y=true_f4, 
+     x=f1$x1,
+     xlab = "x",
+     ylab = "f(x)",
+     title("Actual f(x) = -x(1-x)"),
+     t = 'l')
+
+
+
+f4_hat <- c()
+data4 <- c()
+for( i in 1:10 ) {
+  x= c(func4[i,1], func4[i,2] , func4[i,3])
+  y = func4[i,4] + func4[i,5]*x+ func4[i,6]*x**2
+  f4_hat = c(f4_hat, y)
+  data4 = c(data4, x)
+}
+
+plot(y=f4_hat , x=data4, title("Interpolated f(x), n=10", xlab = "x", ylab = "f(x) = -x(1-x)"), t= 'l')
+
+
+#n=3
+f1_3 <- data.frame(x1 = seq(from = 0 , to = 1 , by = 1/3))
+func5 <- inter_function(fn1, n = 3)
+
+true_f5 <- (-f1_3$x1*(1-f1_3$x1))
+plot(y=true_f5, 
+     x=f1_3$x1,
+     xlab = "x",
+     ylab = "f(x)",
+     title("Actual f(x) = -x(1-x)"),
+     t = 'l')
+
+
+
+f5_hat <- c()
+data5 <- c()
+for( i in 1:3 ) {
+  x= c(func5[i,1], func5[i,2] , func5[i,3])
+  y = func5[i,4] + func5[i,5]*x+ func5[i,6]*x**2
+  f5_hat = c(f5_hat, y)
+  data5 = c(data5, x)
+}
+
+plot(y=f5_hat , x=data5, title("Interpolated f(x), n=3", xlab = "x", ylab = "f(x) = -x(1-x)"), t= 'l')
