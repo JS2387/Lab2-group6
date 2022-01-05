@@ -88,19 +88,19 @@ First we check the plot of the actual value of the functions without interpolati
 ```{r}
 f1 <- data.frame(x1 = seq(from = 0 , to = 1 , by = 0.01))
 
-true_f1 <- (-f1$x1*(1-f1$x1))
-plot(y=true_f1, 
-     x=f1$x1,
-     xlab = "x",
-     ylab = "f(x)",
-     title("Actual f(x) = -x(1-x)"))
-
-true_f2 <- -f1$x1*sin(10*pi*f1$x1)
-plot(y=true_f2, 
-     x=f1$x1,
-     xlab = "x",
-     ylab = "f(x)",
-     title("Actual f(x) = -x*sin(10*pi*x)"), t='l')
+# true_f1 <- (-f1$x1*(1-f1$x1))
+# plot(y=true_f1, 
+#      x=f1$x1,
+#      xlab = "x",
+#      ylab = "f(x)",
+#      title("Actual f(x) = -x(1-x)"))
+# 
+# true_f2 <- -f1$x1*sin(10*pi*f1$x1)
+# plot(y=true_f2, 
+#      x=f1$x1,
+#      xlab = "x",
+#      ylab = "f(x)",
+#      title("Actual f(x) = -x*sin(10*pi*x)"), t='l')
 
 ```
 
@@ -119,7 +119,8 @@ for( i in 1:100 ) {
   data1 = c(data1, x)
 }
 
-plot(y=f1_hat , x=data1, title("Interpolated f(x), n=100", xlab = "x", ylab = "f(x) = -x(1-x)"))
+#plot(y=f1_hat , x=data1, title("Interpolated f(x), n=100", xlab = "x", 
+#                                   ylab = "f(x) = -x(1-x)"))
 ```
 
 Looking at the plot for $f_1(x) =-x(1-x)$ we can see that our approximation seems to be pretty spot on and does not differ in any meaningful way from the true function. 
@@ -139,7 +140,8 @@ for( i in 1:100 ) {
   data2 = c(data2 , x )
 }
 
-plot(y=f2_hat , x=data2, title("Interpolated f(x), n=100 "), xlab = "x", ylab = "f(x) = -x*sin(10*pi*x)")
+#plot(y=f2_hat , x=data2, title("Interpolated f(x), n=100 "), xlab = "x", 
+#                           ylab = "f(x) = -x*sin(10*pi*x)")
 ```
 
 Continuing on with $f_2(x) -x sin(10\pi x)$ there does not seem to be any meaningful discrepancies between our approximation of the function and the actual function.
@@ -152,11 +154,11 @@ f1_3 <- data.frame(x1 = seq(from = 0 , to = 1 , by = 1/3))
 func5 <- inter_function(fn1, n = 3)
 
 true_f5 <- (-f1_3$x1*(1-f1_3$x1))
-plot(y=true_f5, 
-     x=f1_3$x1,
-     xlab = "x",
-     ylab = "f(x)",
-     t = 'l')
+# plot(y=true_f5, 
+#      x=f1_3$x1,
+#      xlab = "x",
+#      ylab = "f(x)",
+#      t = 'l')
 
 
 
@@ -169,19 +171,20 @@ for( i in 1:3 ) {
   data5 = c(data5, x)
 }
 
-plot(y=f5_hat , x=data5, title("Interpolated f(x), n=3", xlab = "x", ylab = "f(x) = -x(1-x)"), t= 'l')
+#plot(y=f5_hat , x=data5, title("Interpolated f(x), n=3", xlab = "x", 
+#                     ylab = "f(x) = -x(1-x)"), t= 'l')
 
 ##n=10
 f1_2 <- data.frame(x1 = seq(from = 0 , to = 1 , by = 0.1))
 func4 <- inter_function(fn1, n = 10)
 
 true_f4 <- (-f1_2$x1*(1-f1_2$x1))
-plot(y=true_f4, 
-     x=f1_2$x1,
-     xlab = "x",
-     ylab = "f(x)",
-     title("Actual f(x) = -x(1-x)"),
-     t = 'l')
+# plot(y=true_f4, 
+#      x=f1_2$x1,
+#      xlab = "x",
+#      ylab = "f(x)",
+#      title("Actual f(x) = -x(1-x)"),
+#      t = 'l')
 
 
 
@@ -194,7 +197,8 @@ for( i in 1:10 ) {
   data4 = c(data4, x)
 }
 
-plot(y=f4_hat , x=data4, title("Interpolated f(x), n=10", xlab = "x", ylab = "f(x) = -x(1-x)"), t= 'l')
+#plot(y=f4_hat , x=data4, title("Interpolated f(x), n=10", xlab = "x", 
+#                                   ylab = "f(x) = -x(1-x)"), t= 'l')
 
 ##n=1000
 f1_1 <- data.frame(x1 = seq(from = 0 , to = 1 , by = 0.001))
@@ -205,11 +209,11 @@ func3 <- inter_function(fn2, n = 1000)
 
 
 true_f3 <- -f1_1$x1*sin(10*pi*f1_1$x1)
-plot(y=true_f3, 
-     x=f1_1$x1,
-     xlab = "x",
-     ylab = "f(x)",
-     title("Actual f(x) = -x*sin(10*pi*x)"))
+# plot(y=true_f3, 
+#      x=f1_1$x1,
+#      xlab = "x",
+#      ylab = "f(x)",
+#      title("Actual f(x) = -x*sin(10*pi*x)"))
 
 
 f3_hat <- c()
@@ -221,7 +225,8 @@ for( i in 1:1000 ) {
   data3 = c(data3 , x )
 }
 
-plot(y=f3_hat , x=data3, title("Interpolated f(x), n=1000 "), xlab = "x", ylab = "f(x) = -x*sin(10*pi*x)", t='l' )
+#plot(y=f3_hat , x=data3, title("Interpolated f(x), n=1000 "), xlab = "x",
+#                             ylab = "f(x) = -x*sin(10*pi*x)", t='l' )
 ```
 
 Thus higher number of intervals taken will result in a more significant approximation of the function.
